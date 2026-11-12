@@ -15,10 +15,10 @@ static const struct device *pwm_leds_dev = DEVICE_DT_GET_ONE(pwm_leds);
 
 static uint8_t current_brightness = 100;
 
-#define SENSOR_MIN      0       // Minimum sensor reading
-#define SENSOR_MAX      100   // Maximum sensor reading
-#define PWM_MIN         1       // Minimum PWM duty cycle (%) - keep display visible
-#define PWM_MAX         100     // Maximum PWM duty cycle (%)
+#define SENSOR_MIN      0
+#define SENSOR_MAX      100
+#define PWM_MIN         25      // Keep the display readable in dark environments
+#define PWM_MAX         100
 
 #define FADE_STEP                        1
 #define FADE_SLEEP_BRIGHTEN_MS           3
@@ -32,17 +32,14 @@ static uint8_t current_brightness = 100;
 #define BURST_SAMPLE_CONSECUTIVE         3
 
 uint8_t map_light_to_pwm(int32_t sensor_reading) {
-    // Handle invalid/error readings
     if (sensor_reading < SENSOR_MIN) {
-        return PWM_MIN;  // Default to minimum brightness on error
+        return PWM_MIN;
     }
 
-    // Clamp to maximum
     if (sensor_reading > SENSOR_MAX) {
         sensor_reading = SENSOR_MAX;
     }
 
-    // Linear mapping
     uint8_t pwm_value = (uint8_t)(
         PWM_MIN + ((PWM_MAX - PWM_MIN) *
         (sensor_reading - SENSOR_MIN)) / (SENSOR_MAX - SENSOR_MIN)
@@ -63,7 +60,6 @@ uint8_t bl_fade(uint8_t source, uint8_t target) {
 
         current_brightness += increasing ? FADE_STEP : -FADE_STEP;
 
-        // Ensure we don't overshoot bounds
         if (current_brightness > 100) {
             current_brightness = 100;
         } else if (current_brightness < 0) {
@@ -90,12 +86,8 @@ extern void als_thread(void *d0, void *d1, void *d2) {
         printk("sensor: device not ready.\n");
     }
 
-    // led_set_brightness(pwm_leds_dev, DISP_BL, 100);
-
     while (1) {
-
         k_msleep(NORMAL_SAMPLE_SLEEP_MS);
-
 
         if (sensor_sample_fetch(dev)) {
             LOG_ERR("sensor_sample fetch failed\n");
@@ -105,10 +97,7 @@ extern void als_thread(void *d0, void *d1, void *d2) {
             LOG_ERR("Cannot read ALS data.\n");
         }
 
-        // LOG_INF("ambient light intensity %d", intensity.val1);
-
         mapped_brightness = map_light_to_pwm(intensity.val1);
-        // LOG_INF("NORMAL: mapped PWM duty cycle %d\n", mapped_brightness);
 
         if (abs(mapped_brightness - current_brightness) > FADE_THRESHOLD) {
             uint8_t integrator = 0;
@@ -124,21 +113,17 @@ extern void als_thread(void *d0, void *d1, void *d2) {
                 }
 
                 mapped_brightness = map_light_to_pwm(intensity.val1);
-                // LOG_INF("BURST: mapped PWM duty cycle %d\n", mapped_brightness);
 
                 if (abs(mapped_brightness - current_brightness) > FADE_THRESHOLD) {
                     integrator++;
-                    // printk("integrator at: %d", integrator);
                     if (integrator >= BURST_SAMPLE_CONSECUTIVE) {
                         bl_fade(current_brightness, mapped_brightness);
                         current_brightness = mapped_brightness;
-                        // LOG_INF("SETTING NEW BRIGHTNESS: %d", mapped_brightness);
                         break;
                     }
                 }
             }
         }
-        // led_set_brightness(pwm_leds_dev, DISP_BL, map_light_to_pwm(intensity.val1));
     }
 }
 
@@ -149,7 +134,6 @@ K_THREAD_DEFINE(als_tid, 1024, als_thread, NULL, NULL, NULL, K_LOWEST_APPLICATIO
 
 static int init_fixed_brightness(void) {
     led_set_brightness(pwm_leds_dev, DISP_BL, CONFIG_PROSPECTOR_FIXED_BRIGHTNESS);
-
     return 0;
 }
 
