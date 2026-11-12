@@ -27,7 +27,8 @@ static void create_black_cat(lv_obj_t *parent) {
     lv_obj_set_size(left_ear, 18, 18);
     lv_obj_align(left_ear, LV_ALIGN_TOP_LEFT, 13, 5);
     lv_obj_set_style_radius(left_ear, 4, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(left_ear, lv_color_hex(0x24202A), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(left_ear, lv_color_hex(0x34303A), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(left_ear, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_border_width(left_ear, 0, LV_PART_MAIN);
     lv_obj_set_style_transform_angle(left_ear, 450, LV_PART_MAIN);
 
@@ -35,7 +36,8 @@ static void create_black_cat(lv_obj_t *parent) {
     lv_obj_set_size(right_ear, 18, 18);
     lv_obj_align(right_ear, LV_ALIGN_TOP_LEFT, 45, 5);
     lv_obj_set_style_radius(right_ear, 4, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(right_ear, lv_color_hex(0x24202A), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(right_ear, lv_color_hex(0x34303A), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(right_ear, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_border_width(right_ear, 0, LV_PART_MAIN);
     lv_obj_set_style_transform_angle(right_ear, 450, LV_PART_MAIN);
 
@@ -44,7 +46,8 @@ static void create_black_cat(lv_obj_t *parent) {
     lv_obj_set_size(face, 54, 42);
     lv_obj_align(face, LV_ALIGN_TOP_LEFT, 11, 14);
     lv_obj_set_style_radius(face, 19, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(face, lv_color_hex(0x111015), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(face, lv_color_hex(0x29242F), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(face, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_border_color(face, lv_color_hex(0x51445F), LV_PART_MAIN);
     lv_obj_set_style_border_width(face, 1, LV_PART_MAIN);
     lv_obj_set_style_pad_all(face, 0, LV_PART_MAIN);
@@ -55,6 +58,7 @@ static void create_black_cat(lv_obj_t *parent) {
     lv_obj_align(left_eye, LV_ALIGN_TOP_LEFT, 25, 29);
     lv_obj_set_style_radius(left_eye, LV_RADIUS_CIRCLE, LV_PART_MAIN);
     lv_obj_set_style_bg_color(left_eye, lv_color_hex(0xFFB52E), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(left_eye, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_border_width(left_eye, 0, LV_PART_MAIN);
 
     lv_obj_t *right_eye = lv_obj_create(cat);
@@ -62,6 +66,7 @@ static void create_black_cat(lv_obj_t *parent) {
     lv_obj_align(right_eye, LV_ALIGN_TOP_LEFT, 45, 29);
     lv_obj_set_style_radius(right_eye, LV_RADIUS_CIRCLE, LV_PART_MAIN);
     lv_obj_set_style_bg_color(right_eye, lv_color_hex(0xFFB52E), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(right_eye, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_border_width(right_eye, 0, LV_PART_MAIN);
 
     lv_obj_t *nose = lv_obj_create(cat);
@@ -69,6 +74,7 @@ static void create_black_cat(lv_obj_t *parent) {
     lv_obj_align(nose, LV_ALIGN_TOP_LEFT, 36, 39);
     lv_obj_set_style_radius(nose, LV_RADIUS_CIRCLE, LV_PART_MAIN);
     lv_obj_set_style_bg_color(nose, lv_color_hex(0xFF8A9B), LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(nose, LV_OPA_COVER, LV_PART_MAIN);
     lv_obj_set_style_border_width(nose, 0, LV_PART_MAIN);
 }
 
