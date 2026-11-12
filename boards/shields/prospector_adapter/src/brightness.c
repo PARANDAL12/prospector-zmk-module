@@ -82,6 +82,10 @@ extern void als_thread(void *d0, void *d1, void *d2) {
     uint8_t mapped_brightness;
 
     dev = DEVICE_DT_GET_ONE(avago_apds9960);
+    // Start fully lit; the ambient sensor will smoothly adjust brightness afterward.
+    if (led_set_brightness(pwm_leds_dev, DISP_BL, current_brightness)) {
+        LOG_ERR("Failed to set initial display brightness");
+    }
     if (!device_is_ready(dev)) {
         printk("sensor: device not ready.\n");
     }
