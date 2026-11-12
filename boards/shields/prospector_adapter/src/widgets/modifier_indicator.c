@@ -195,7 +195,6 @@ int zmk_widget_modifier_indicator_init(struct zmk_widget_modifier_indicator *wid
 
     widget->caps_label = lv_label_create(widget->obj);
     lv_label_set_text(widget->caps_label, "CAPS");
-    lv_obj_set_style_text_font(widget->caps_label, &lv_font_montserrat_14, LV_PART_MAIN);
     lv_obj_set_style_text_color(widget->caps_label, lv_color_hex(0x101010), LV_PART_MAIN);
 
     sys_slist_append(&widgets, &widget->node);
