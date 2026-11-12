@@ -25,6 +25,7 @@ struct modifier_state {
     bool ctrl;
     bool shift;
 #endif
+    bool caps_lock;
 #ifdef CONFIG_DT_HAS_ZMK_BEHAVIOR_CAPS_WORD_ENABLED
     bool caps_word;
 #endif
@@ -37,6 +38,7 @@ static struct modifier_state current_state = {
     .ctrl = false,
     .shift = false,
 #endif
+    .caps_lock = false,
 #ifdef CONFIG_DT_HAS_ZMK_BEHAVIOR_CAPS_WORD_ENABLED
     .caps_word = false,
 #endif
@@ -76,6 +78,7 @@ static void modifier_update_cb(struct modifier_state state) {
         set_modifier_color(widget->shift_label, state.caps_word);
 #endif
 #endif
+        set_modifier_color(widget->caps_label, state.caps_lock);
     }
 }
 
@@ -121,8 +124,14 @@ static void update_modifier_state(uint8_t keycode, bool pressed) {
 
 static int keycode_state_changed_listener(const zmk_event_t *eh) {
     const struct zmk_keycode_state_changed *event = as_zmk_keycode_state_changed(eh);
-    if (event && is_mod(event->usage_page, event->keycode)) {
-        update_modifier_state(event->keycode, event->state);
+    if (event) {
+        if (event->usage_page == HID_USAGE_KEY &&
+            event->keycode == HID_USAGE_KEY_KEYBOARD_CAPS_LOCK && event->state) {
+            current_state.caps_lock = !current_state.caps_lock;
+            modifier_update_cb(current_state);
+        } else if (is_mod(event->usage_page, event->keycode)) {
+            update_modifier_state(event->keycode, event->state);
+        }
     }
     return ZMK_EV_EVENT_BUBBLE;
 }
@@ -183,6 +192,11 @@ int zmk_widget_modifier_indicator_init(struct zmk_widget_modifier_indicator *wid
 #endif
     lv_obj_set_style_text_font(widget->shift_label, &Symbols_Semibold_32, LV_PART_MAIN);
     lv_obj_set_style_text_color(widget->shift_label, lv_color_hex(0x101010), LV_PART_MAIN);
+
+    widget->caps_label = lv_label_create(widget->obj);
+    lv_label_set_text(widget->caps_label, "CAPS");
+    lv_obj_set_style_text_font(widget->caps_label, &lv_font_montserrat_14, LV_PART_MAIN);
+    lv_obj_set_style_text_color(widget->caps_label, lv_color_hex(0x101010), LV_PART_MAIN);
 
     sys_slist_append(&widgets, &widget->node);
 
