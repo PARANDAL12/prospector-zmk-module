@@ -11,6 +11,8 @@
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static struct zmk_widget_layer_roller layer_roller_widget;
+
+#ifdef CONFIG_DT_HAS_ZMK_BEHAVIOR_CAPS_WORD_ENABLED
 static lv_obj_t *caps_word_label;
 
 struct caps_word_display_state {
@@ -35,6 +37,7 @@ static struct caps_word_display_state caps_word_display_get_state(const zmk_even
 ZMK_DISPLAY_WIDGET_LISTENER(widget_caps_word_display, struct caps_word_display_state,
                             caps_word_display_update, caps_word_display_get_state)
 ZMK_SUBSCRIPTION(widget_caps_word_display, zmk_caps_word_state_changed);
+#endif
 
 lv_obj_t *zmk_display_status_screen() {
     lv_obj_t *screen = lv_obj_create(NULL);
@@ -45,6 +48,7 @@ lv_obj_t *zmk_display_status_screen() {
     lv_obj_set_size(zmk_widget_layer_roller_obj(&layer_roller_widget), 224, 90);
     lv_obj_align(zmk_widget_layer_roller_obj(&layer_roller_widget), LV_ALIGN_CENTER, 0, 0);
 
+#ifdef CONFIG_DT_HAS_ZMK_BEHAVIOR_CAPS_WORD_ENABLED
     caps_word_label = lv_label_create(screen);
     lv_label_set_text(caps_word_label, "CAPS WORD");
     lv_obj_set_width(caps_word_label, 160);
@@ -55,6 +59,8 @@ lv_obj_t *zmk_display_status_screen() {
     lv_obj_set_style_border_width(caps_word_label, 0, LV_PART_MAIN);
     lv_obj_set_style_pad_all(caps_word_label, 0, LV_PART_MAIN);
     lv_obj_align(caps_word_label, LV_ALIGN_BOTTOM_RIGHT, -10, -10);
+    widget_caps_word_display_init();
+#endif
 
     return screen;
 }
