@@ -49,7 +49,7 @@ lv_obj_t *zmk_display_status_screen() {
     caps_lock_label = lv_label_create(screen);
     lv_label_set_text(caps_lock_label, "");
     lv_obj_set_width(caps_lock_label, 64);
-    lv_obj_set_style_text_font(caps_lock_label, &lv_font_montserrat_20, LV_PART_MAIN);
+    lv_obj_set_style_text_font(caps_lock_label, &FG_Medium_20, LV_PART_MAIN);
     lv_obj_set_style_text_color(caps_lock_label, lv_color_hex(0xFF8A00), LV_PART_MAIN);
     lv_obj_set_style_text_align(caps_lock_label, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN);
     lv_obj_set_style_bg_opa(caps_lock_label, LV_OPA_TRANSP, LV_PART_MAIN);
